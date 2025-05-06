@@ -1,54 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react'
+import Upload from './components/Upload'
 
-function App() {
-  const [file, setFile] = useState(null);
-  const [downloadUrl, setDownloadUrl] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-    setDownloadUrl('');
-  };
-
-  const handleUpload = async () => {
-    if (!file) return;
-    setLoading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const res = await fetch('https://your-render-url/unprotect', {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await res.json();
-      if (data.download_url) {
-        setDownloadUrl(`https://your-render-url${data.download_url}`);
-      }
-    } catch (err) {
-      console.error('Upload failed:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+export default function App() {
   return (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
-      <h1>🛡️ SheetBreaker Web</h1>
-      <input type="file" accept=".xlsx" onChange={handleFileChange} />
-      <button onClick={handleUpload} disabled={loading}>
-        {loading ? 'Processing...' : 'Unprotect File'}
-      </button>
-      {downloadUrl && (
-        <p>
-          <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
-            Download Unprotected File
-          </a>
-        </p>
-      )}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-black p-4">
+      <h1 className="text-4xl font-bold text-green-400 mb-6 font-mono">SheetBreaker</h1>
+      <Upload />
+      <footer className="mt-10 text-gray-500 text-sm">&copy; 2025 SheetBreaker | All Rights Reserved</footer>
     </div>
-  );
+  )
 }
-
-export default App;
